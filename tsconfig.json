@@ -15,6 +15,7 @@
     "noImplicitAny": false,
     "noImplicitThis": true,
     "noUnusedLocals": true,
+    "strictNullChecks": true,
     "sourceMap": false,
     "inlineSourceMap": true,
     "outDir": "build",
