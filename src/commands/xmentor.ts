@@ -11,6 +11,7 @@ export default {
 
     try {
       const pathToExercise = (await system.run(`exercism download --uuid=${exerciseUUID}`)).trim()
+      const fileName = pathToExercise.substring(pathToExercise.lastIndexOf('\\') + 1)
       spinner.succeed()
 
       spinner.start('Installing dependencies.')
@@ -18,11 +19,11 @@ export default {
       spinner.succeed(installText)
 
       spinner.start('Unskipping all tests')
-      const testFile = await filesystem.readAsync(`${pathToExercise}/leap.test.ts`)
+      const testFile = await filesystem.readAsync(`${pathToExercise}/${fileName}.test.ts`)
+      const testCount = countTests(testFile)
       const unskippedTests = unskipTests(unskipDescribes(testFile))
-      const testCount = countTests(unskippedTests)
 
-      await filesystem.writeAsync(`${pathToExercise}/leap.test.ts`, unskippedTests)
+      await filesystem.writeAsync(`${pathToExercise}//${fileName}.test.ts`, unskippedTests)
       spinner.succeed(`Found ${testCount} tests`)
 
       spinner.start('Running tests.')
@@ -54,5 +55,6 @@ export function unskipTests(testFileContent: string): string {
 }
 
 export function countTests(testFileContent: string): number {
-  return (testFileContent.match(/^test|^it| test| it/gm) || []).length
+  const TEST_NOT_SKIPPED = 1
+  return (testFileContent.match(/test\.only|it\.only|ftest|fit|test\.skip|it\.skip|xtest|xit/g) || []).length + TEST_NOT_SKIPPED
 }
