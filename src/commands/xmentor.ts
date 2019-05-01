@@ -25,7 +25,9 @@ export default {
       if (!pathToExercise) throw new Error('Path to exercise missing');
 
       const testName = getTestName(pathToExercise);
+      if (!testName) throw new Error('Test name not found');
       const solutionLanguage = getLanguage(pathToExercise);
+      if (!solutionLanguage) throw new Error('Language not supported');
       spinner.succeed();
 
       spinner.start('Installing dependencies.');
@@ -63,12 +65,12 @@ export default {
   },
 };
 
-export function getTestName(exercisePath: string): string {
+export function getTestName(exercisePath: string): string | undefined {
   const splitPath = exercisePath.split('/');
   return splitPath[splitPath.length - 1];
 }
 
-export function getLanguage(exercisePath: string): string {
+export function getLanguage(exercisePath: string): string | undefined {
   const splitPath = exercisePath.split('/');
   return splitPath[splitPath.length - 2];
 }
