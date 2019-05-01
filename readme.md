@@ -1,25 +1,15 @@
 # xmentor CLI
 
-A CLI for xmentor.
+A CLI for mentors of the TypeScript track on exercism.io
 
-## Customizing your CLI
+## Install
+To install, clone repo then: 
 
-Check out the documentation at https://github.com/infinitered/gluegun/tree/master/docs.
-
-## Publishing to NPM
-
-To package your CLI up for NPM, do this:
-
-```shell
-$ npm login
-$ npm whoami
-$ npm lint
-$ npm test
-(if typescript, run `npm run build` here)
-$ npm publish
+```bash
+$ npm link
 ```
 
-# License
-
-MIT - see LICENSE
-
+## Use
+```bash
+$ xmentor [solution UUID]
+```
