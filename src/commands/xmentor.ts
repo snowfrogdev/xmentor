@@ -21,9 +21,12 @@ export default {
       const pathToExercise = (await system.run(`exercism download --uuid=${exerciseUUID}`)).trim();
       if (!pathToExercise) throw new Error('Path to exercise missing');
 
-      const testName = getTestName(pathToExercise);
+      const seperator = filesystemSeparator(pathToExercise);
+      if (!seperator) throw new Error('Filesystem not supported');
+
+      const testName = getTestName(pathToExercise, seperator);
       if (!testName) throw new Error('Test name not found');
-      const solutionLanguage = getLanguage(pathToExercise);
+      const solutionLanguage = getLanguage(pathToExercise, seperator);
       if (!solutionLanguage) throw new Error('Language not supported');
       spinner.succeed();
 
@@ -62,13 +65,18 @@ export default {
   },
 };
 
-export function getTestName(exercisePath: string): string | undefined {
-  const splitPath = exercisePath.split('/');
+export function filesystemSeparator(filePath: string): string | undefined {
+  const knownSeperators = ['\\', '/'];
+  return knownSeperators.find((seperator) => filePath.includes(seperator));
+}
+
+export function getTestName(exercisePath: string, seperator: string): string | undefined {
+  const splitPath = exercisePath.split(seperator);
   return splitPath[splitPath.length - 1];
 }
 
-export function getLanguage(exercisePath: string): string | undefined {
-  const splitPath = exercisePath.split('/');
+export function getLanguage(exercisePath: string, seperator: string): string | undefined {
+  const splitPath = exercisePath.split(seperator);
   return splitPath[splitPath.length - 2];
 }
 
