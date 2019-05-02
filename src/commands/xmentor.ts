@@ -14,11 +14,8 @@ export default {
   name: 'xmentor',
   run: async (toolbox: GluegunToolbox) => {
     const { print, parameters, system, prompt, filesystem } = toolbox;
-
     const exerciseUUID = parameters.string;
     const spinner = print.spin({ text: 'Downloading student solution.', spinner: 'dots' });
-
-    if (!exerciseUUID) return spinner.fail('Please provide an UUID');
 
     try {
       const pathToExercise = (await system.run(`exercism download --uuid=${exerciseUUID}`)).trim();
